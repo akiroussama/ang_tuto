@@ -1,0 +1,50 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold">Zoneless Change Detection</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Demo Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-lg mb-4">Live Demo</h3>
+      <p class="mb-4">This entire application is running without Zone.js. All UI updates are driven by signals.</p>
+
+      <div class="space-y-4">
+        <div>
+          <p class="text-lg">Timer (from <code>setInterval</code>):</p>
+          <div class="font-mono text-3xl p-2 bg-gray-100 rounded-md">{{ timer() }}</div>
+        </div>
+
+        <div>
+           <p class="text-lg">Native Button Clicks (from <code>addEventListener</code>):</p>
+          <div class="flex items-center space-x-4">
+             <button id="nativeBtn" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition">Click me (Native Listener)</button>
+             <div class="font-mono text-3xl p-2 bg-gray-100 rounded-md">{{ clickCount() }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explanation Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="prose max-w-none">
+        <h4>Why it matters</h4>
+        <ul>
+          <li><strong>Smaller Bundle:</strong> No need to ship the Zone.js library, reducing the application's footprint.</li>
+          <li><strong>Performance:</strong> Eliminates the overhead of Zone.js's patching of browser APIs and the associated microtask churn.</li>
+          <li><strong>Predictable Reactivity:</strong> Change detection only runs when a signal is updated, giving developers explicit control over when the UI re-renders.</li>
+          <li><strong>Future-Proof:</strong> Aligns Angular with modern JavaScript frameworks and browser standards.</li>
+        </ul>
+        <h4>How to verify</h4>
+        <ol>
+          <li>Confirm that the "Zoneless: ON" badge is visible in the header HUD.</li>
+          <li>Observe that the timer updates every second. This is driven by a signal updated from a native <code>setInterval</code>, which Zone.js would normally patch.</li>
+          <li>Click the "Native Listener" button. The counter updates, proving that native DOM events also trigger re-renders through signals.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-semibold text-lg mb-2">Code Snippet</h3>
+    <app-code-snippet [code]="codeSnippet"></app-code-snippet>
+  </div>
+</div>

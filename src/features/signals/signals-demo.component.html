@@ -1,0 +1,49 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold">Signals: Fine-Grained Reactivity</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Demo Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-lg mb-4">Live Demo</h3>
+      <div class="flex items-center space-x-4">
+        <button (click)="increment()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Increment</button>
+        <button (click)="reset()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">Reset</button>
+      </div>
+      <div class="mt-6 space-y-2 text-lg">
+        <p><strong>Count (Signal):</strong> <span class="font-mono px-2 py-1 bg-blue-50 rounded-md">{{ count() }}</span></p>
+        <p><strong>Derived Count (Computed):</strong> <span class="font-mono px-2 py-1 bg-green-50 rounded-md">{{ derivedCount() }}</span></p>
+      </div>
+      <div class="mt-4">
+          <h4 class="font-semibold mb-2">Effect Logs (Console & UI):</h4>
+          <div class="h-32 overflow-y-auto bg-gray-50 p-2 rounded-md border text-sm font-mono">
+            @for(log of logs(); track log; let i = $index) {
+              <div>{{ i + 1 }}: {{ log }}</div>
+            }
+          </div>
+      </div>
+    </div>
+
+    <!-- Explanation Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="prose max-w-none">
+        <h4>Why it matters</h4>
+        <ul>
+          <li><strong>Performance:</strong> Updates only the parts of the DOM that depend on a signal's value. No more full component tree checks.</li>
+          <li><strong>Simplicity:</strong> Eliminates the need for RxJS subjects for simple component state.</li>
+          <li><strong>Clarity:</strong> <code>computed()</code> and <code>effect()</code> create a clear, reactive data flow that is easy to reason about.</li>
+        </ul>
+        <h4>How to verify</h4>
+        <ol>
+          <li>Click "Increment" and watch the values update instantly.</li>
+          <li>Observe the "Effect Logs" panel. A new log appears each time the <code>count</code> signal changes.</li>
+          <li>Note that <code>computed()</code> values are memoized; they only re-calculate when a dependency changes, making them highly efficient.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-semibold text-lg mb-2">Code Snippet</h3>
+    <app-code-snippet [code]="codeSnippet"></app-code-snippet>
+  </div>
+</div>

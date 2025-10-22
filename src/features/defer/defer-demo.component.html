@@ -1,0 +1,54 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold">Deferrable Views</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Explanation Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="prose max-w-none">
+        <h4>Why it matters</h4>
+        <ul>
+          <li><strong>Faster Initial Load:</strong> By deferring non-critical components, the initial bundle size is smaller, leading to better Time to Interactive (TTI) and Largest Contentful Paint (LCP).</li>
+          <li><strong>Better UX:</strong> Use <code>@placeholder</code> and <code>@loading</code> to provide immediate feedback to the user, preventing layout shifts and perceived slowness.</li>
+          <li><strong>Declarative:</strong> A simple, declarative syntax for a powerful performance pattern that previously required complex manual implementation.</li>
+        </ul>
+        <h4>How to verify</h4>
+        <ol>
+          <li>The page loads instantly with a placeholder for the "Heavy Widget". The widget's code is not yet loaded.</li>
+          <li>Scroll down until the placeholder area enters the viewport.</li>
+          <li>You will see a "Loading..." state for at least 500ms. During this time, the browser is downloading and rendering the widget's code.</li>
+          <li>The heavy widget appears. It has now been lazily loaded.</li>
+        </ol>
+      </div>
+    </div>
+    
+    <!-- Code Snippet -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+       <h3 class="font-semibold text-lg mb-2">Code Snippet</h3>
+      <app-code-snippet [code]="codeSnippet"></app-code-snippet>
+    </div>
+  </div>
+
+  <div class="space-y-4 pt-8">
+    <h3 class="font-semibold text-lg">Live Demo</h3>
+    <p>Scroll down to see the deferred block load.</p>
+    <div class="h-96"></div> <!-- Spacer to ensure defer block is off-screen -->
+    
+    <div class="p-4 border border-dashed border-gray-400 rounded-lg min-h-[200px]">
+      @defer (on viewport) {
+        <app-heavy-widget></app-heavy-widget>
+      } @placeholder {
+        <div class="h-48 flex items-center justify-center bg-gray-100 rounded-md text-gray-500">
+          <p>This is a placeholder. The heavy widget is below the fold.</p>
+        </div>
+      } @loading (minimum 500ms) {
+         <div class="h-48 flex items-center justify-center bg-blue-50 rounded-md text-blue-600">
+          <p>Loading heavy widget...</p>
+        </div>
+      } @error {
+        <div class="h-48 flex items-center justify-center bg-red-50 rounded-md text-red-600">
+          <p>Oops! The widget failed to load.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

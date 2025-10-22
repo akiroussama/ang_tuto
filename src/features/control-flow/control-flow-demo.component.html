@@ -1,0 +1,56 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold">Built-in Control Flow</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Demo Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-lg mb-4">Live Demo</h3>
+      <div class="flex items-center space-x-4 mb-4">
+        <button (click)="addUser()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Add User</button>
+      </div>
+
+      @if (users().length > 0) {
+        <p class="text-sm text-gray-600 mb-2">Showing {{ users().length }} users. Click on a user to remove them.</p>
+      }
+
+      <ul class="space-y-2 border rounded-md p-4">
+        @for (user of users(); track user.id) {
+          <li (click)="removeUser(user.id)" class="flex justify-between items-center p-2 rounded-md hover:bg-red-50 cursor-pointer transition">
+            <span>{{ user.name }}</span>
+            @switch (user.status) {
+              @case ('active') { <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800">Active</span> }
+              @case ('inactive') { <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-800">Inactive</span> }
+              @default { <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Pending</span> }
+            }
+          </li>
+        } @empty {
+          <li class="text-gray-500 italic p-2">No users to display. Add one!</li>
+        }
+      </ul>
+    </div>
+
+    <!-- Explanation Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="prose max-w-none">
+        <h4>Why it matters</h4>
+        <ul>
+          <li><strong>Ergonomics:</strong> Much cleaner and more intuitive syntax than <code>*ngFor</code>, <code>*ngIf</code>, etc.</li>
+          <li><strong>Type-safe:</strong> Better type checking within template blocks.</li>
+          <li><strong>Performance:</strong> The <code>track</code> function is mandatory in <code>@for</code>, leading to more efficient DOM updates by default. The new algorithm is also generally faster.</li>
+          <li><strong>No Imports:</strong> No need to import <code>CommonModule</code> for control flow directives anymore.</li>
+        </ul>
+        <h4>How to verify</h4>
+        <ol>
+          <li>Click "Add User" to see the list grow.</li>
+          <li>Click on a user to remove them. Notice the smooth and efficient updates.</li>
+          <li>Remove all users to see the <code>@empty</code> block in action.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-semibold text-lg mb-2">Code Snippet</h3>
+    <app-code-snippet [code]="codeSnippet"></app-code-snippet>
+  </div>
+</div>

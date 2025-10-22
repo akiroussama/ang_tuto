@@ -1,0 +1,62 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold">Signal-based Forms</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Demo Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-lg mb-4">Live Demo</h3>
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input id="email" type="email" formControlName="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+          @if (emailErrors(); as errors) {
+            @if (errors?.['required']) { <small class="text-red-600">Email is required.</small> }
+            @if (errors?.['email']) { <small class="text-red-600">Please enter a valid email.</small> }
+          }
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input id="password" type="password" formControlName="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+          @if (passwordErrors(); as errors) {
+            @if (errors?.['required']) { <small class="text-red-600">Password is required.</small> }
+            @if (errors?.['minlength']) { <small class="text-red-600">Password must be at least 8 characters.</small> }
+          }
+        </div>
+        <button type="submit" [disabled]="!isFormValid()" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition">
+          Submit
+        </button>
+      </form>
+      @if (submittedValue(); as value) {
+        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-md">
+          <h4 class="font-semibold text-green-800">Form Submitted Successfully!</h4>
+          <pre class="text-sm text-green-700">{{ value | json }}</pre>
+        </div>
+      }
+    </div>
+
+    <!-- Explanation Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="prose max-w-none">
+        <h4>Why it matters</h4>
+        <ul>
+          <li><strong>Truly Reactive Forms:</strong> In Angular v20+, form controls expose their value, status, validity, and errors as signals out-of-the-box.</li>
+          <li><strong>Simplified Logic:</strong> Eliminates the need for <code>toSignal</code> or RxJS operators for managing basic form state. Component logic becomes much cleaner.</li>
+          <li><strong>Unified State Management:</strong> Form state seamlessly integrates with the rest of your signal-based application state.</li>
+          <li><strong>Improved Performance:</strong> Signal-based bindings ensure that only the relevant parts of the DOM update when form state changes.</li>
+        </ul>
+        <h4>How to verify</h4>
+        <ol>
+          <li>The "Submit" button is disabled initially.</li>
+          <li>Type a valid email. The error message disappears instantly.</li>
+          <li>Type a password less than 8 characters. An error message appears. Extend it to 8 characters, and the message disappears.</li>
+          <li>Once both fields are valid, the "Submit" button becomes enabled. Its state is controlled by a direct signal from the form.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-semibold text-lg mb-2">Code Snippet</h3>
+    <app-code-snippet [code]="codeSnippet"></app-code-snippet>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold">@let Template Declaration</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Demo Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-lg mb-4">Live Demo</h3>
+      
+      <div class="flex items-center space-x-4 mb-4">
+        <button (click)="updatePrice()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Increase Base Price</button>
+        <label class="flex items-center space-x-2">
+          <input type="checkbox" [checked]="useLet()" (change)="useLet.set(!useLet())" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+          <span>Use @let</span>
+        </label>
+      </div>
+
+      <div class="p-4 border rounded-md bg-gray-50">
+        <p class="mb-2"><strong>Product:</strong> {{ product().name }}</p>
+        <p class="mb-4"><strong>Base Price:</strong> {{ product().basePrice | number:'1.2-2' }}</p>
+
+        @if (useLet()) {
+          @let discountedPrice = calculateDiscountedPrice(product());
+          <div>
+            <h4 class="font-semibold">With @let (Efficient)</h4>
+            <p>Final Price: <span class="font-mono">{{ discountedPrice | number:'1.2-2' }}</span></p>
+            <p>You Save: <span class="font-mono">{{ (product().basePrice - discountedPrice) | number:'1.2-2' }}</span></p>
+          </div>
+        } @else {
+          <div>
+            <h4 class="font-semibold">Without @let (Inefficient)</h4>
+            <p>Final Price: <span class="font-mono">{{ calculateDiscountedPrice(product()) | number:'1.2-2' }}</span></p>
+            <p>You Save: <span class="font-mono">{{ (product().basePrice - calculateDiscountedPrice(product())) | number:'1.2-2' }}</span></p>
+          </div>
+        }
+      </div>
+
+      <div class="mt-4">
+          <h4 class="font-semibold mb-2">Function Call Logs:</h4>
+          <div class="h-32 overflow-y-auto bg-gray-800 text-gray-300 p-2 rounded-md border text-sm font-mono">
+            @for(log of logs(); track $index) {
+              <div>{{ log }}</div>
+            }
+          </div>
+      </div>
+    </div>
+
+    <!-- Explanation Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="prose max-w-none">
+        <h4>Why it matters</h4>
+        <ul>
+          <li><strong>DRY Templates:</strong> Avoid repeating complex expressions or method calls in your templates.</li>
+          <li><strong>Performance:</strong> Computes a value once and reuses it within the template block, preventing expensive recalculations on every binding.</li>
+          <li><strong>Readability:</strong> Gives a descriptive name to a computed value, making the template easier to understand.</li>
+        </ul>
+        <h4>How to verify</h4>
+        <ol>
+          <li>Toggle the "Use @let" switch off. Click "Increase Base Price". Notice the log shows <strong>two</strong> calls to <code>calculateDiscountedPrice()</code> per update.</li>
+          <li>Now, toggle "Use @let" on. Click the button again. The log now shows only <strong>one</strong> call per update.</li>
+          <li><code>@let</code> stores the result of the first calculation and reuses it, improving performance and cleaning up the template.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-semibold text-lg mb-2">Code Snippet</h3>
+    <app-code-snippet [code]="codeSnippet"></app-code-snippet>
+  </div>
+</div>

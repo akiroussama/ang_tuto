@@ -1,0 +1,5 @@
+{
+  "name": "Angular v20+ Showcase",
+  "description": "A showcase of new features from Angular v17 to v20, demonstrating Signals, new control flow, deferrable views, zoneless capabilities, and more in a simulated micro-frontend architecture.",
+  "requestFramePermissions": []
+}

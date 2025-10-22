@@ -1,0 +1,65 @@
+<div class="space-y-6">
+  <h2 class="text-2xl font-bold">Data Fetching with Signals</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Demo Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-lg mb-4">Live Demo</h3>
+      <p class="text-sm text-gray-600 mb-4">Search for "angular", "react", or "vue". Type quickly to see cancellation in action in the browser's network tab (simulated here with console logs).</p>
+      
+      <input 
+        (input)="onSearch($event)" 
+        type="text" 
+        placeholder="Search..." 
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <div class="mt-4 min-h-[150px] p-4 bg-gray-50 rounded-md border">
+        @if (dataState().loading) {
+          <div class="flex items-center justify-center text-gray-500">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Loading...</span>
+          </div>
+        } @else if (dataState().error) {
+          <div class="text-red-600">Error fetching data.</div>
+        } @else if (dataState().value; as results) {
+          @if (results.length > 0) {
+            <ul class="list-disc list-inside">
+              @for (item of results; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          } @else {
+            <p class="text-gray-500">No results found. Type to search.</p>
+          }
+        }
+      </div>
+    </div>
+
+    <!-- Explanation Panel -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <div class="prose max-w-none">
+        <h4>Why it matters</h4>
+        <ul>
+          <li><strong>Seamless Interop:</strong> <code>toSignal</code> provides an official, clean bridge from the RxJS ecosystem (like <code>HttpClient</code>) to the new signal-based reactivity model.</li>
+          <li><strong>Boilerplate Reduction:</strong> Eliminates the need for manual subscription management (<code>.subscribe()</code>, <code>takeUntil()</code>) and the async pipe in templates.</li>
+          <li><strong>Built-in Cancellation:</strong> Using operators like <code>switchMap</code> with <code>toSignal</code> provides robust cancellation logic out-of-the-box, preventing race conditions and stale data.</li>
+        </ul>
+        <h4>How to verify</h4>
+        <ol>
+          <li>Open your browser's developer console.</li>
+          <li>Type "angular" slowly in the search box. You'll see a loading spinner, and after a delay, the results will appear. A log confirms the "request" completed.</li>
+          <li>Now, type "react" very quickly. You will see a log for the "react" query starting, but the previous requests for "r", "re", etc. are implicitly cancelled by <code>switchMap</code>. Only the final request completes.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="font-semibold text-lg mb-2">Code Snippet</h3>
+    <app-code-snippet [code]="codeSnippet"></app-code-snippet>
+  </div>
+</div>
