@@ -1,0 +1,104 @@
+<div class="space-y-8">
+  <h2 class="text-2xl font-bold">Native Federation for Micro-Frontends</h2>
+  
+  <div class="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg">
+    <strong>Note:</strong> This application simulates a micro-frontend (MFE) architecture by lazy-loading components. This screen explains the concepts of <strong>Native Federation</strong>, which would be used to build a true MFE in a production environment.
+  </div>
+
+  <!-- Core Concepts -->
+  <div class="bg-white p-6 rounded-lg border border-gray-200 space-y-4">
+    <h3 class="font-semibold text-xl">Core Concepts</h3>
+    <p>Native Federation leverages browser-native ES Modules, removing the dependency on Webpack-specific logic and making the architecture more standardized and future-proof.</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+      <div class="p-4 bg-gray-50 rounded-md">
+        <h4 class="font-bold">Host (Shell)</h4>
+        <p class="text-sm">The main application that orchestrates and renders remotes. It contains the primary navigation and layout.</p>
+      </div>
+      <div class="p-4 bg-gray-50 rounded-md">
+        <h4 class="font-bold">Remote</h4>
+        <p class="text-sm">A separately deployed application (a micro-frontend) that exposes modules for the host to consume.</p>
+      </div>
+      <div class="p-4 bg-gray-50 rounded-md">
+        <h4 class="font-bold">Manifest</h4>
+        <p class="text-sm">A <code>federation.manifest.json</code> file published by a remote. It acts as a contract, listing the name, version, and exposed modules.</p>
+      </div>
+    </div>
+    <app-code-snippet [code]="manifestSnippet"></app-code-snippet>
+  </div>
+
+  <!-- Possibilities -->
+  <div class="space-y-6">
+    <!-- Possibility 1: Lazy Loading -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-xl mb-2">Possibility 1: Lazy Loading Components & Routes</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="prose max-w-none">
+          <p>This is the primary use case. The host application can lazy-load a component or an entire set of routes from a remote MFE. This keeps the initial bundle small and allows teams to develop and deploy their features independently.</p>
+          <h4>Why it matters</h4>
+          <ul>
+            <li><strong>Decoupling:</strong> Teams can work on their remotes in isolation.</li>
+            <li><strong>Performance:</strong> Users only download the code for the features they access.</li>
+            <li><strong>Scalability:</strong> Easily add new features by creating and linking new remotes.</li>
+          </ul>
+        </div>
+        <div>
+          <app-code-snippet [code]="hostRoutingSnippet"></app-code-snippet>
+        </div>
+      </div>
+    </div>
+
+    <!-- Possibility 2: Sharing Libraries -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-xl mb-2">Possibility 2: Sharing Libraries</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="prose max-w-none">
+          <p>To avoid duplicating common dependencies (like Angular, RxJS, or component libraries) in every remote's bundle, you can configure them as shared libraries. Native Federation ensures that only one instance of a shared library is loaded on the page.</p>
+          <h4>Why it matters</h4>
+          <ul>
+            <li><strong>Efficiency:</strong> Drastically reduces total download size for the user.</li>
+            <li><strong>Consistency:</strong> Using <code>singleton: true</code> ensures a single instance of a library, preventing version conflicts and unexpected behavior.</li>
+          </ul>
+        </div>
+        <div>
+          <app-code-snippet [code]="sharedLibsSnippet"></app-code-snippet>
+        </div>
+      </div>
+    </div>
+
+    <!-- Possibility 3: Sharing State -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-xl mb-2">Advanced Possibility 3: Sharing State</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="prose max-w-none">
+          <p>Communicating between remotes is a common challenge. A robust pattern is to create a dedicated "common" remote that exposes a shared state service (e.g., using signals or a state management library). The host loads this service and provides it, making it available for dependency injection in other remotes.</p>
+          <h4>Why it matters</h4>
+          <ul>
+            <li><strong>Centralized Logic:</strong> Provides a single source of truth for shared application state.</li>
+            <li><strong>Type-Safe Communication:</strong> Avoids fragile methods like browser events or the window object.</li>
+          </ul>
+        </div>
+        <div>
+          <app-code-snippet [code]="sharedStateSnippet"></app-code-snippet>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Possibility 4: Dynamic Federation -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h3 class="font-semibold text-xl mb-2">Advanced Possibility 4: Dynamic Federation</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="prose max-w-none">
+          <p>In highly dynamic applications, you may not know which remotes to load at build time. Dynamic federation allows you to fetch a remote's manifest from a server at runtime, initialize it, and then load its modules. This is perfect for plugin-based architectures or systems where features are enabled based on user permissions.</p>
+          <h4>Why it matters</h4>
+          <ul>
+            <li><strong>Ultimate Flexibility:</strong> Build systems where new micro-frontends can be added without rebuilding or redeploying the host application.</li>
+            <li><strong>Custom User Experiences:</strong> Tailor the application's functionality by loading different sets of remotes for different users.</li>
+          </ul>
+        </div>
+        <div>
+          <app-code-snippet [code]="dynamicFederationSnippet"></app-code-snippet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

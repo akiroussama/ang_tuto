@@ -48,6 +48,11 @@ export const APP_ROUTES: Routes = [
     loadComponent: () => import('./features/forms/forms-demo.component').then(c => c.FormsDemoComponent),
   },
   {
+    path: 'native-federation',
+    data: { name: 'Native Federation', version: '18.0.0' },
+    loadComponent: () => import('./features/native-federation/native-federation-demo.component').then(c => c.NativeFederationDemoComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   }

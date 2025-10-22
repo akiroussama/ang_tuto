@@ -55,6 +55,7 @@ export class AppComponent implements OnInit {
     { name: 'API Signals', path: '/api-signals' },
     { name: 'Incremental Hydration', path: '/hydration' },
     { name: 'Signal-based Forms', path: '/forms' },
+    { name: 'Native Federation', path: '/native-federation' },
   ];
 
   ngOnInit() {
