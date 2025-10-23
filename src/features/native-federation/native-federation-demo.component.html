@@ -101,4 +101,48 @@
       </div>
     </div>
   </div>
+
+  <!-- Best Practices -->
+  <div class="space-y-6">
+    <h3 class="text-xl font-bold border-t pt-6 mt-6 border-gray-200">Top 5 Best Practices for MFE with Angular & Native Federation</h3>
+  
+    <!-- Practice 1 -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h4 class="font-semibold text-lg">1. Isolate Remotes & Define Clear APIs</h4>
+      <p class="mt-2 text-gray-700">Treat each remote as a black box. It should be self-contained and expose a well-defined public API (e.g., component inputs, exposed services). Avoid direct dependencies between remotes; all communication should flow through the host or a shared service. Using Standalone Components makes this isolation clearer, as all dependencies are explicitly listed in the component's <code>imports</code> array.</p>
+      <p class="mt-2 text-sm font-semibold text-gray-600"><strong>How it avoids bugs:</strong> Changes within one remote won't accidentally break another, as long as the public API contract is respected. This allows teams to iterate independently with confidence.</p>
+    </div>
+  
+    <!-- Practice 2 -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h4 class="font-semibold text-lg">2. Manage Shared Dependencies Strictly</h4>
+      <p class="mt-2 text-gray-700">Use the <code>shared</code> configuration in Native Federation to ensure only one instance of core libraries (like <code>@angular/core</code>, <code>rxjs</code>) is loaded. Always configure them as singletons with strict versioning. This prevents subtle bugs caused by version mismatches or multiple instances of stateful libraries.</p>
+      <p class="mt-2 text-sm font-semibold text-gray-600"><strong>How it avoids bugs:</strong> Guarantees a stable and predictable runtime environment, eliminating issues where, for example, <code>instanceof</code> checks fail because an object comes from a different library instance.</p>
+    </div>
+  
+    <!-- Practice 3 -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h4 class="font-semibold text-lg">3. Centralize Cross-MFE State with Signal-based Services</h4>
+      <p class="mt-2 text-gray-700">For state that needs to be shared across remotes, create a dedicated "common" remote that exposes singleton services. Build these services with Angular Signals. This provides a highly efficient, fine-grained, and predictable way for different parts of your application to react to state changes without resorting to fragile solutions like window events.</p>
+      <p class="mt-2 text-sm font-semibold text-gray-600"><strong>How it avoids bugs:</strong> Creates a single source of truth and a clear, type-safe data flow, making state changes easy to trace and debug.</p>
+    </div>
+  
+    <!-- Practice 4 -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h4 class="font-semibold text-lg">4. Implement Versioned Deployments & Immutable Artifacts</h4>
+      <p class="mt-2 text-gray-700">Your CI/CD pipeline for each remote should publish its build artifacts (JS files, manifest) to a unique, versioned path (e.g., <code>/remotes/my-feature/1.2.0/</code>). Never overwrite a previous version's artifacts.</p>
+      <ul class="mt-4 space-y-2 text-gray-700 list-disc list-inside">
+        <li><strong>How to deploy a new version:</strong> Build the remote, deploy its artifacts to a new versioned path, and update the host's manifest mapping to point to the new <code>federation.manifest.json</code> URL. This can be managed via a configuration file or a dynamic lookup service.</li>
+        <li><strong>How to restore an old version:</strong> Because old artifacts are immutable and still available, rolling back is as simple as changing the manifest URL back to the previous, stable version. This process is nearly instantaneous and has minimal risk.</li>
+      </ul>
+      <app-code-snippet [code]="versionedDeploymentSnippet"></app-code-snippet>
+    </div>
+  
+    <!-- Practice 5 -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200">
+      <h4 class="font-semibold text-lg">5. Design for Resilience and Independent Testability</h4>
+      <p class="mt-2 text-gray-700">The host application should be resilient to a remote failing to load. Use features like the <code>&#64;error</code> block in <code>&#64;defer</code> or error handlers in your routing configuration to gracefully handle cases where a remote is unavailable. Furthermore, each remote should be fully testable in isolation. It should have its own development shell or harness to allow developers to run, test, and debug it without needing the entire host application.</p>
+      <p class="mt-2 text-sm font-semibold text-gray-600"><strong>How it avoids bugs:</strong> Prevents a single failing MFE from taking down the entire application. Independent testing catches bugs earlier in the development cycle, long before integration.</p>
+    </div>
+  </div>
 </div>

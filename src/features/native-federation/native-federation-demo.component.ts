@@ -83,4 +83,21 @@ async function loadMicroFrontend(userRole: string) {
   // 3. Load the module
   return loadRemoteModule(userRole, './Feature');
 }`;
+
+  versionedDeploymentSnippet = `
+// host-shell/src/environments/environment.prod.ts
+
+// This configuration can be fetched from a remote server at startup.
+export const remoteManifests = {
+  'demo-signals': 'https://cdn.my-app.com/remotes/demo-signals/1.2.1/federation.manifest.json',
+  'demo-forms': 'https://cdn.my-app.com/remotes/demo-forms/2.0.0/federation.manifest.json',
+  // ... other remotes
+};
+
+// To roll back 'demo-signals' to version 1.2.0 due to a bug, you would update the URL:
+// 'demo-signals': 'https://cdn.my-app.com/remotes/demo-signals/1.2.0/federation.manifest.json',
+
+// Your host's federation initialization would then use this map.
+initFederation(remoteManifests);
+`;
 }
